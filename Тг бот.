@@ -1,0 +1,34 @@
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+# Обработчик команды /start
+def start(update, context):
+    update.message.reply_text('Привет! я твой виртуальный помощник, напили мне чтобы ты хотел от меня и я это сделаю.')
+
+# Обработчик команды /help
+def help(update, context):
+    update.message.reply_text('Для использования этого бота отправьте мне сообщение.')
+
+# Обработчик всех входящих сообщений
+def echo(update, context):
+    update.message.reply_text(update.message.text)
+
+def main():
+    # Создание объекта Updater и передача токена вашего бота
+    updater = Updater("YOUR_TOKEN_HERE", use_context=True)
+
+    # Получение диспетчера для регистрации обработчиков
+    dp = updater.dispatcher
+
+    # Регистрация обработчиков
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    # Запуск бота
+    updater.start_polling()
+
+    # Остановка бота при нажатии Ctrl+C
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
